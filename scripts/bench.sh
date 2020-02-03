@@ -6,8 +6,7 @@ unable="RESULT: Ultimate could not prove your program: unable to determine termi
 invalid="RESULT: Ultimate could not prove your program: Toolchain returned no result."
 timeout="RESULT: Ultimate could not prove your program: Timeout"
 
-BASE_DIR="/home/mab/Desktop/ic/passes/scripts"
-ULTIMATE_DIR="$BASE_DIR/ultimate"
+ULTIMATE_DIR="../ultimate"
 TIMEOUT_PARAM="100s"
 
 if [ -z ${FILES_DIR+x} ];

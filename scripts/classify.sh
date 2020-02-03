@@ -1,7 +1,6 @@
 #!/bin/bash
 
-BASEDIR=$(pwd)
-LIB_FILE="$BASEDIR/../build/lib/libnested-loop-counter.so"
+LIB_FILE="../build/lib/libnested-loop-counter.so"
 LIB_FLAG=-nested-loop-counter
 BC_FILE=tmp.bc
 RBC_FILE=tmp.rbc
@@ -14,7 +13,7 @@ then
 fi
 
 NOW="$(date +"%y-%m-%dT%H:%M:%SZ")"
-RESULTS_DIR="results/$NOW"
+RESULTS_DIR="../results/$NOW"
 mkdir -p $RESULTS_DIR
 
 classify_nested_loop () {
