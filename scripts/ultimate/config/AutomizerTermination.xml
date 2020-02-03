@@ -1,0 +1,15 @@
+<rundefinition>
+	<name>Ultimate Toolchain</name>
+	<toolchain>
+		
+	<plugin id="de.uni_freiburg.informatik.ultimate.plugins.generator.cacsl2boogietranslator"/>
+	<plugin id="de.uni_freiburg.informatik.ultimate.boogie.procedureinliner"/>
+	<plugin id="de.uni_freiburg.informatik.ultimate.boogie.preprocessor"/>
+	<plugin id="de.uni_freiburg.informatik.ultimate.plugins.generator.rcfgbuilder"/>
+	<plugin id="de.uni_freiburg.informatik.ultimate.plugins.generator.buchiautomizer"/>
+
+	<!-- comment this line so it does not generate the .graphml file for incorrect proved programs-->
+	<!-- <plugin id="de.uni_freiburg.informatik.ultimate.witnessprinter"/> -->
+	
+	</toolchain>
+</rundefinition>
