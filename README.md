@@ -1,3 +1,10 @@
+## REQUIREMENTS
+
+ - Update PATH
+    - `export PATH="$PATH:<your/ultimate/dir>"`
+
+ - Java JDK (1.8)
+
 ## HOW TO
 
 ### to build the .so libs
