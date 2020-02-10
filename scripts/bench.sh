@@ -9,14 +9,14 @@ timeout="RESULT: Ultimate could not prove your program: Timeout"
 ULTIMATE_DIR="../ultimate"
 TIMEOUT_PARAM="100s"
 
-if [ -z ${FILES_DIR+x} ];
+if [ -z ${1+x} ];
 then
-  echo "usage: FILES_DIR=<path/to/dir> $0"
+  echo "usage: $0 <path/to/dir>"
   exit 1
 fi
 
-NOW="$(date +"%y-%m-%dT%H:%M:%SZ")"
-LOG_FILE="$FILES_DIR/log-$NOW.csv"
+FILES_DIR=$1
+LOG_FILE="$FILES_DIR/log.csv"
 
 # basic_blocks? branches? ???
 echo "nested_loops;termination;time" > $LOG_FILE
@@ -31,6 +31,7 @@ for DIR in $FILES_DIR/*; do
       continue
     fi
     
+    filename=${FILE##*/}
     nested_loops=${DIR##*/}
     
     echo "running for $FILE"
@@ -42,6 +43,8 @@ for DIR in $FILES_DIR/*; do
     rc=$?
     
     elapsed=$((($(date +%s%N) - $ts) / 1000000)) # time in milliseconds
+    
+    echo -e "$RESULT" > "${FILE:0:-2}.out"
     
     if [ $rc == 124 ]
     then
@@ -73,7 +76,7 @@ for DIR in $FILES_DIR/*; do
       ;;
     esac
     
-    echo "$nested_loops;$termination;$elapsed" >> $LOG_FILE
+    echo "$nested_loops;$termination;$elapsed;$filename" >> $LOG_FILE
     count=$(($count+1))
     
   done
