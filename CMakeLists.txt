@@ -86,4 +86,4 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 #===============================================================================
 add_subdirectory(passes/hello-world)
 add_subdirectory(passes/op-counter)
-add_subdirectory(passes/nested-loop-counter)
+add_subdirectory(passes/filter-programs)

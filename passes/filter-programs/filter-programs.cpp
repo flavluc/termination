@@ -22,10 +22,10 @@ unsigned countNestedLoops(Loop *L, unsigned level)
 	return maxLevel;
 }
 
-struct NestedLoopCounter : public ModulePass
+struct FilterPrograms : public ModulePass
 {
 	static char ID;
-	NestedLoopCounter() : ModulePass(ID) {}
+	FilterPrograms() : ModulePass(ID) {}
 
 	void getAnalysisUsage(AnalysisUsage &analysisUsage) const override
 	{
@@ -39,12 +39,21 @@ struct NestedLoopCounter : public ModulePass
 
 		for (auto &func : module)
 		{
-			if (!func.isDeclaration())
-			{
-				LoopInfo &loopInfo = getAnalysis<LoopInfoWrapperPass>(func).getLoopInfo();
-				for (auto loop : loopInfo)
-					maxNestedLoops = max(maxNestedLoops, countNestedLoops(loop, 1));
-			}
+			if (func.isDeclaration())
+				continue;
+
+			for (auto &bb : func)
+				for (auto &inst : bb)
+					if (isa<CallInst>(&inst))
+					{
+						// StringRef name = cast<CallInst>(inst).getCalledFunction()->getName();
+						cout << "-1\n";
+						return false;
+					}
+
+			LoopInfo &loopInfo = getAnalysis<LoopInfoWrapperPass>(func).getLoopInfo();
+			for (auto loop : loopInfo)
+				maxNestedLoops = max(maxNestedLoops, countNestedLoops(loop, 1));
 		}
 
 		cout << maxNestedLoops << "\n";
@@ -54,5 +63,5 @@ struct NestedLoopCounter : public ModulePass
 };
 } // namespace
 
-char NestedLoopCounter::ID = 0;
-static RegisterPass<NestedLoopCounter> X("nested-loop-counter", "Count the number of nested loops in the program");
+char FilterPrograms::ID = 0;
+static RegisterPass<FilterPrograms> X("filter-programs", "Count the number of nested loops in the program");
