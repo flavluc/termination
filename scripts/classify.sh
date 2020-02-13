@@ -21,7 +21,7 @@ RESULTS_DIR="../results/$NOW"
 mkdir -p $RESULTS_DIR
 
 repeat() {
-  if [ $2 != 0 ]
+  if [ $2 -gt 0 ]
   then
     printf "$1"'%.s' $(seq 1 $2)
   fi
@@ -30,15 +30,12 @@ repeat() {
 progress_bar(){
   local curr=$1
   local total=$2
-  local file=$3
-  
-  (( ${#file} > 50 )) && name="${name:0:47}..."
   
   local percent=$(( curr*100/total ))
-  local curr_prog=$(( $percent/2 -1 ))
+  local curr_prog=$(( $percent/2 ))
   local total_prog=$(( 50-$curr_prog-1))
   
-  echo -ne "$(printf "%10s" "$percent%") [$(repeat "=" $curr_prog )>$(repeat " " $total_prog )] ($curr) $(printf "%-130s" "$file")\r"
+  echo -ne "$(printf "%10s" "$percent%") [$(repeat "=" $curr_prog )>$(repeat " " $total_prog )] ($curr) $curr_prog \r"
 }
 
 classify_nested_loop () {
@@ -62,8 +59,7 @@ for file in $FILES_DIR/*; do
     classify_nested_loop $file
     count=$(($count+1))
     
-    filename=${file##*/}
-    progress_bar $count $total_files $filename
+    progress_bar $count $total_files
   fi
 done
 

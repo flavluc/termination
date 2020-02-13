@@ -30,7 +30,7 @@
 # timeout 2s result=$(echo "ola")
 
 repeat() {
-  if [ $2 != 0 ]
+  if [ $2 -gt 0 ]
   then
     printf "$1"'%.s' $(seq 1 $2)
   fi
@@ -63,6 +63,8 @@ progress_bar(){
 # total=$(ls "$1" | grep '\.c$' | wc -l)
 # echo $total
 
-printf "%-10s" "ola"
+# printf "%-10s" "ola"
 
 # echo -n "Old line"; echo -e "\e[0K\r new line"
+
+# \033[<L>;<C>f
