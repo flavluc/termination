@@ -35,7 +35,7 @@ progress_bar(){
   local curr_prog=$(( $percent/2 ))
   local total_prog=$(( 50-$curr_prog-1))
   
-  echo -ne "$(printf "%10s" "$percent%") [$(repeat "=" $curr_prog )>$(repeat " " $total_prog )] ($curr) $curr_prog \r"
+  echo -ne "$(printf "%10s" "$percent%") [$(repeat "=" $curr_prog )>$(repeat " " $total_prog )] ($curr)\r"
 }
 
 classify_nested_loop () {
