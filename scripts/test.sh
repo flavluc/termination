@@ -68,3 +68,7 @@ progress_bar(){
 # echo -n "Old line"; echo -e "\e[0K\r new line"
 
 # \033[<L>;<C>f
+
+for file in $(find $1 -type f -name "*.c"); do
+  echo $file
+done

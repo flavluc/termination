@@ -22,7 +22,7 @@ clang  -emit-llvm -c input.c -o input.bc
 
 ### old and new pass manager
 ```
-lpm: opt -load libHelloWorld.so -hello-world -disable-output <input-llvm-file>
+opm: opt -load libHelloWorld.so -hello-world -disable-output <input-llvm-file>
 npm: opt -load-pass-plugin=libHelloWorld.so -passes="hello-world" -disable-output <input-llvm-file>
 ```
 

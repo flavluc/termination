@@ -1,5 +1,23 @@
 #!/bin/bash
 
+repeat() {
+  if [ $2 -gt 0 ]
+  then
+    printf "$1"'%.s' $(seq 1 $2)
+  fi
+}
+
+progress_bar(){
+  local curr=$1
+  local total=$2
+  
+  local percent=$(( curr*100/total ))
+  local curr_prog=$(( $percent/2 ))
+  local total_prog=$(( 50-$curr_prog-1))
+  
+  echo -ne "$(printf "%10s" "$percent%") [$(repeat "=" $curr_prog )>$(repeat " " $total_prog )] ($curr/$total)\r"
+}
+
 terminating="RESULT: Ultimate proved your program to be correct!"
 nonterminating="RESULT: Ultimate proved your program to be incorrect!"
 unable="RESULT: Ultimate could not prove your program: unable to determine termination"
@@ -22,6 +40,7 @@ LOG_FILE="$FILES_DIR/log.csv"
 echo "nested_loops;termination;time" > $LOG_FILE
 
 count=0
+total_files=$(find $FILES_DIR -type f -name "*.c" | wc -l)
 
 for DIR in $FILES_DIR/*; do
   for FILE in $DIR/*; do
@@ -31,10 +50,12 @@ for DIR in $FILES_DIR/*; do
       continue
     fi
     
+    progress_bar $count $total_files
+    
     filename=${FILE##*/}
     nested_loops=${DIR##*/}
     
-    echo "running for $FILE"
+    # echo "running for $FILE"
     
     ts=$(date +%s%N)
     
@@ -71,8 +92,7 @@ for DIR in $FILES_DIR/*; do
         termination="timeout"
       ;;
       *)
-        echo -e "an error occurred while running for $FILE\n$RESULT"
-        termination="error"
+        termination=RESULT
       ;;
     esac
     

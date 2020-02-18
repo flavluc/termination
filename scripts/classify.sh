@@ -35,7 +35,7 @@ progress_bar(){
   local curr_prog=$(( $percent/2 ))
   local total_prog=$(( 50-$curr_prog-1))
   
-  echo -ne "$(printf "%10s" "$percent%") [$(repeat "=" $curr_prog )>$(repeat " " $total_prog )] ($curr)\r"
+  echo -ne "$(printf "%10s" "$percent%") [$(repeat "=" $curr_prog )>$(repeat " " $total_prog )] ($curr/$total)\r"
 }
 
 classify_nested_loop () {
@@ -51,7 +51,7 @@ classify_nested_loop () {
 }
 
 count=0
-total_files=$(ls "$FILES_DIR" | grep '\.c$' | wc -l)
+total_files=$(find $FILES_DIR -type f -name "*.c" | wc -l)
 
 for file in $FILES_DIR/*; do
   if [ ${file: -2} == ".c" ]

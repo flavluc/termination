@@ -2,3 +2,5 @@
 build
 angha
 results
+scripts/*.bc
+scripts/*.rbc
