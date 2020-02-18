@@ -28,7 +28,10 @@ endif()
 # find_package can locate it)
 list(APPEND CMAKE_PREFIX_PATH "${LT_LLVM_INSTALL_DIR}/lib/cmake/llvm/")
 
-find_package(LLVM 10.0.0 REQUIRED CONFIG)
+find_package(LLVM REQUIRED)
+if (${LLVM_VERSION_MAJOR} VERSION_LESS 9)
+    message(SEND_ERROR "Unsupported LLVM version found: ${LLVM_PACKAGE_VERSION}")
+endif()
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LT_LLVM_INSTALL_DIR}")
 
