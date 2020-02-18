@@ -1,6 +1,7 @@
 .vscode
 build
-angha
+angha/*
+!angha/seed
 results
 scripts/*.bc
 scripts/*.rbc
