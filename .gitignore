@@ -5,3 +5,4 @@ angha/*
 results
 scripts/*.bc
 scripts/*.rbc
+**/.ipynb_checkpoints

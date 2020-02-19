@@ -1,27 +1,12 @@
 #!/bin/bash
 
-repeat() {
-  if [ $2 -gt 0 ]
-  then
-    printf "$1"'%.s' $(seq 1 $2)
-  fi
-}
+. ./progress-bar.sh --source-only
 
-progress_bar(){
-  local curr=$1
-  local total=$2
-  
-  local percent=$(( curr*100/total ))
-  local curr_prog=$(( $percent/2 ))
-  local total_prog=$(( 50-$curr_prog-1))
-  
-  echo -ne "$(printf "%10s" "$percent%") [$(repeat "=" $curr_prog )>$(repeat " " $total_prog )] ($curr/$total)\r"
-}
-
-terminating="RESULT: Ultimate proved your program to be correct!"
-nonterminating="RESULT: Ultimate proved your program to be incorrect!"
-unable="RESULT: Ultimate could not prove your program: unable to determine termination"
-invalid="RESULT: Ultimate could not prove your program: Toolchain returned no result."
+# terminating="RESULT: Ultimate proved your program to be correct!"
+# nonterminating="RESULT: Ultimate proved your program to be incorrect!"
+# unable="RESULT: Ultimate could not prove your program: unable to determine termination"
+# invalid="RESULT: Ultimate could not prove your program: Toolchain returned no result."
+#invalid_syntax="RESULT: Ultimate could not prove your program: Toolchain returned no result."
 timeout="RESULT: Ultimate could not prove your program: Timeout"
 
 ULTIMATE_DIR="../ultimate"
@@ -74,29 +59,7 @@ for DIR in $FILES_DIR/*; do
       RESULT=$(echo "$RESULT" | grep RESULT)
     fi
     
-    case $RESULT in
-      
-      $terminating)
-        termination="terminating"
-      ;;
-      $nonterminating)
-        termination="nonterminating"
-      ;;
-      $unable)
-        termination="unable"
-      ;;
-      $invalid)
-        termination="invalid"
-      ;;
-      $timeout)
-        termination="timeout"
-      ;;
-      *)
-        termination=RESULT
-      ;;
-    esac
-    
-    echo "$nested_loops;$termination;$elapsed;$filename" >> $LOG_FILE
+    echo "$nested_loops;\"$RESULT\";$elapsed;$filename" >> $LOG_FILE
     count=$(($count+1))
     
   done
