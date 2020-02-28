@@ -10,15 +10,15 @@
 timeout="RESULT: Ultimate could not prove your program: Timeout"
 
 ULTIMATE_DIR="../ultimate"
-TIMEOUT_PARAM="100s"
 
-if [ -z ${1+x} ];
+if [ -z ${1+x} ] || [ -z ${2+x} ];
 then
-  echo "usage: $0 <path/to/dir>"
+  echo "usage: $0 <path/to/dir> <timeout-in-secs>"
   exit 1
 fi
 
 FILES_DIR=$1
+TIMEOUT_PARAM=$2
 LOG_FILE="$FILES_DIR/log.csv"
 
 # basic_blocks? branches? ???
