@@ -8,9 +8,6 @@ BC_FILE=tmp.bc
 RBC_FILE=tmp.rbc
 LOG_FILE=log.txt
 
-touch $BC_FILE
-touch $RBC_FILE
-
 if [ -z ${1+x} ];
 then
   echo "usage: $0 <path/to/dir>"
@@ -22,10 +19,13 @@ FILES_DIR="$1"
 RESULTS_DIR="../results/$NOW"
 mkdir -p $RESULTS_DIR
 
+touch $RESULTS_DIR/$BC_FILE
+touch $RESULTS_DIR/$RBC_FILE
+
 classify_nested_loop () {
-  clang -emit-llvm -c $1 -o $BC_FILE &>> $RESULTS_DIR/$LOG_FILE
-  opt -mem2reg $BC_FILE -o $RBC_FILE &>> $RESULTS_DIR/$LOG_FILE
-  RESULT="$(opt -load $LIB_FILE $LIB_FLAG -disable-output $RBC_FILE)"
+  clang -emit-llvm -c $1 -o $RESULTS_DIR/$BC_FILE &>> $RESULTS_DIR/$LOG_FILE
+  opt -mem2reg $BC_FILE -o $RESULTS_DIR/$RBC_FILE &>> $RESULTS_DIR/$LOG_FILE
+  RESULT="$(opt -load $LIB_FILE $LIB_FLAG -disable-output $RESULTS_DIR/$RBC_FILE)"
   
   if [ "$RESULT" != "-1" ]
   then
@@ -47,7 +47,7 @@ for file in $FILES_DIR/*; do
   fi
 done
 
-rm $BC_FILE
-rm $RBC_FILE
+rm $RESULTS_DIR/$BC_FILE
+rm $RESULTS_DIR/$RBC_FILE
 
 echo -e "\n$count programs analized"
