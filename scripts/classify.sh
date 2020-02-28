@@ -24,7 +24,7 @@ touch $RESULTS_DIR/$RBC_FILE
 
 classify_nested_loop () {
   clang -emit-llvm -c $1 -o $RESULTS_DIR/$BC_FILE &>> $RESULTS_DIR/$LOG_FILE
-  opt -mem2reg $BC_FILE -o $RESULTS_DIR/$RBC_FILE &>> $RESULTS_DIR/$LOG_FILE
+  opt -mem2reg $RESULTS_DIR/$BC_FILE -o $RESULTS_DIR/$RBC_FILE &>> $RESULTS_DIR/$LOG_FILE
   RESULT="$(opt -load $LIB_FILE $LIB_FLAG -disable-output $RESULTS_DIR/$RBC_FILE)"
   
   if [ "$RESULT" != "-1" ]
