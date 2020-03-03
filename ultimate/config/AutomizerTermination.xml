@@ -7,7 +7,7 @@
 	<plugin id="de.uni_freiburg.informatik.ultimate.boogie.preprocessor"/>
 	<plugin id="de.uni_freiburg.informatik.ultimate.plugins.generator.rcfgbuilder"/>
 	<plugin id="de.uni_freiburg.informatik.ultimate.plugins.generator.buchiautomizer"/>
-	<plugin id="de.uni_freiburg.informatik.ultimate.witnessprinter"/>
+	<!-- <plugin id="de.uni_freiburg.informatik.ultimate.witnessprinter"/> -->
 	
 	</toolchain>
 </rundefinition>

@@ -2,14 +2,10 @@
 
 . ./progress-bar.sh --source-only
 
-# terminating="RESULT: Ultimate proved your program to be correct!"
-# nonterminating="RESULT: Ultimate proved your program to be incorrect!"
-# unable="RESULT: Ultimate could not prove your program: unable to determine termination"
-# invalid="RESULT: Ultimate could not prove your program: Toolchain returned no result."
-#invalid_syntax="RESULT: Ultimate could not prove your program: Toolchain returned no result."
-timeout="RESULT: Ultimate could not prove your program: Timeout"
-
 ULTIMATE_DIR="../ultimate"
+CONFIG_DIR="$ULTIMATE_DIR/config"
+TOOLCHAIN_FILE="AutomizerTermination.xml"
+SETTINGS_FILE="svcomp-Termination-64bit-Automizer_Default.epf"
 
 if [ -z ${1+x} ] || [ -z ${2+x} ];
 then
@@ -21,8 +17,7 @@ FILES_DIR=$1
 TIMEOUT_PARAM=$2
 LOG_FILE="$FILES_DIR/log.csv"
 
-# basic_blocks? branches? ???
-echo "nested_loops;termination;time" > $LOG_FILE
+echo "" > $LOG_FILE
 
 count=0
 total_files=$(find $FILES_DIR -type f -name "*.c" | wc -l)
@@ -37,32 +32,23 @@ for DIR in $FILES_DIR/*; do
     
     progress_bar $count $total_files
     
-    filename=${FILE##*/}
-    nested_loops=${DIR##*/}
+    RESULT="$($ULTIMATE_DIR/Ultimate -s $CONFIG_DIR/$SETTINGS_FILE -tc $CONFIG_DIR/$TOOLCHAIN_FILE --core.toolchain.timeout.in.seconds $TIMEOUT_PARAM  -i $FILE --generate-csv --csv-dir $DIR)"
     
-    # echo "running for $FILE"
+    rm -rf "$HOME/.ultimate"
     
-    ts=$(date +%s%N)
+    FILENAME=${FILE##*/}
+    CSV_DIR="${FILENAME}_${SETTINGS_FILE}_${TOOLCHAIN_FILE}"
     
-    RESULT="$(timeout $TIMEOUT_PARAM $ULTIMATE_DIR/Ultimate -s $ULTIMATE_DIR/config/svcomp-Termination-64bit-Automizer_Default.epf -tc $ULTIMATE_DIR/config/AutomizerTermination.xml -i $FILE)"
+    echo -e "$RESULT" > "$DIR/$CSV_DIR/${FILENAME:0:-2}.out"
     
-    rc=$?
+    RESULT=$(echo "$RESULT" | grep RESULT)
+    echo "$count => $RESULT" >> $LOG_FILE
     
-    elapsed=$((($(date +%s%N) - $ts) / 1000000)) # time in milliseconds
-    
-    echo -e "$RESULT" > "${FILE:0:-2}.out"
-    
-    if [ $rc == 124 ]
-    then
-      RESULT=$timeout
-    else
-      RESULT=$(echo "$RESULT" | grep RESULT)
-    fi
-    
-    echo "$nested_loops;\"$RESULT\";$elapsed;$filename" >> $LOG_FILE
     count=$(($count+1))
     
   done
 done
 
-echo "$count programs analized, results generated at $LOG_FILE"
+progress_bar $count $total_files
+echo -e "\n$count programs analized! Results are generated for each file."
+
