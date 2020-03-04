@@ -2,7 +2,8 @@
 build
 angha/*
 !angha/seed
-results
+results/*
+!results/results.ipynb
 scripts/*.bc
 scripts/*.rbc
 **/.ipynb_checkpoints
